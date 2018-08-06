@@ -1,0 +1,88 @@
+---
+title: "Data Manipulation"
+author: "Nina Chaichi"
+date: "May 22, 2018"
+output: pdf_document
+---
+
+```{r}
+library(pander)
+```
+
+```{r}
+airqual <- airquality
+pandoc.table(head(airqual))
+class(airqual)
+```
+
+```{r}
+summary(airqual)
+nrow(airqual)
+ncol(airqual)
+```
+
+```{r}
+install.packages("dplyr")
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+selected_airqual <- select(airqual,Wind:Day)
+dropped_airqual <- select(airqual,-Ozone,-Solar.R)
+```
+
+```{r}
+class_selction_airqual <- select_if(airqual,is.integer)
+```
+
+```{r}
+reordered_airqual <- select(airqual,Wind:Day,everything())
+```
+
+```{r}
+renamed_airqual <- dplyr::rename(airqual,Solar=Solar.R)
+```
+
+```{r}
+filtered_airqual <- filter(airqual,Month=="5")
+cond_filtered_airqual <- filter(airqual,Wind >= 20)
+```
+
+```{r}
+m_filtered_airqual <- filter(airqual,Month %in% c("5","9"))
+and_filtered_airqual <- filter(airqual,Month %in% c("5","9") & Temp >= 70)
+or_filtered_airqual <- filter(airqual,Month %in% c("5","9") | Temp >= 70)
+not_filtered_airqual <- filter(airqual,!Month %in% c("5","9"))
+double_cond_filtered_airqual <- filter(airqual,Month %in% c("5","9") & Temp >= 70 & Temp <= 80)
+```
+
+```{r}
+grouped_airqual <- airqual %>% group_by(Day) %>% do(head(.,2))
+maxtemp_day_airqual <- airqual %>% group_by(Day) %>% do(arrange(.,desc(Temp))) %>% slice(1)
+```
+
+```{r}
+added_variable_airqual <- airqual %>% mutate(rank=min_rank(desc(Temp))) %>% arrange(rank)
+```
+
+```{r}
+install.packages("tidyr")
+```
+
+```{r}
+library(tidyr)
+```
+
+```{r}
+airqual_wide <- airqual %>% select(Temp:Day) %>% spread(Month,Temp)
+airqual_long <- airqual_wide %>% gather(Month,Temp, 2:6)
+```
+
+
+
+
+
+
